@@ -53,7 +53,7 @@ describe('MockFirebase', function(){
       var child1 = fb.child('child1');
       var child2 = child1.child('child2');
 
-      child2.once('value', function(snapshot){
+      child2.once('value', function(snapshot) {
         expect(snapshot.val()).to.equal(null);
 
         fb.set({child1: {child2: 'yay'}});
@@ -70,28 +70,54 @@ describe('MockFirebase', function(){
     it('should allow adding items', function(done){
 
       var list = fb.child('list');
-      list.once('item_added', function(snapshot){
+      list.once('child_added', function(snapshot){
         expect(snapshot.val()).to.equal('one');
-        list.once('item_added', function(snapshot){
+        list.once('child_added', function(snapshot){
           expect(snapshot.val()).to.equal('two');
           
           list.once('value', function(snapshot){
-            // expect(snapshot.val()).to.be.an(Object);
+            expect(snapshot.val()).to.be.an('object');
             var values = [];
             var data = snapshot.val();
-            for(var i = 0; i<data.length; i++){
-              values.push(data[i]);
+            for(var key in data){
+              values.push(data[key]);
             }
-            expect(snapshot.val()).to.equal({a: 'one', b: 'two'});
-            // var values = snapshot.val().map(function(e,i,a){ return e; });
-            expect(values).to.equal(['one', 'two']);
+            expect(values).to.deep.equal(['one', 'two']);
             done();
           });
-
         }); 
-        list.push('two');       
+        list.push().set('two');       
       });
-      list.push('one');
+      var res = list.push('one');
+      expect(res).to.be.an('object');
+      expect(res).to.respondTo('set');
     });
+
+    // it('should allow manipulating items', function(done){
+
+    //   var list = fb.child('list');
+    //   list.set({a: 'foo', b: 'bar'});
+    //   list.once('value', function(snapshot){
+    //     var updates = 0;
+    //     list.once('child_added', function(snapshot){
+    //       expect(snapshot.val()).to.equal('baz');
+    //       updates++;
+    //     });
+    //     list.once('child_removed', function(snapshot){
+    //       expect(snapshot.val()).to.equal('bar');
+    //       updates++;
+    //     });
+    //     list.once('child_changed', function(snapshot){
+    //       expect(snapshot.val()).to.equal('oof');
+    //       updates++;
+    //     });
+    //     list.set({a: 'oof', c: 'bar'})
+    //     list.once('value', function(snapshot){
+    //       expect(snapshot.val()).to.deep.equal({a: 'oof', c: 'bar'});
+    //       expect(updates).to.equal(3);
+    //       done();
+    //     });
+    //   });
+    // });
   });
 });
