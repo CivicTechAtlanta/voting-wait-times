@@ -13,9 +13,17 @@ if(!PRODUCTION){
 }
 
 // access our data store (Socrata)
-var database = new Socrata({
-  hostDomain: process.env.HOST_DOMAIN || 'https://brigades.opendatanetwork.com',
-  resource:   process.env.RESOURCE    || 'ikiz-kvvr',
+var waitDatabase = new Socrata({
+  hostDomain: process.env.WAIT_HOST_DOMAIN || 'https://brigades.opendatanetwork.com',
+  resource:   process.env.WAIT_RESOURCE    || 'ikiz-kvvr',
+  XAppToken:  process.env.SOCRATA_APP_TOKEN,
+  username:   process.env.SOCRATA_USERNAME,
+  password:   process.env.SOCRATA_PASSWORD
+});
+
+var precinctDatabase = new Socrata({
+  hostDomain: process.env.PRECINCT_HOST_DOMAIN || 'https://brigades.opendatanetwork.com',
+  resource:   process.env.PRECINCT_RESOURCE    || '8p6v-ph9y',
   XAppToken:  process.env.SOCRATA_APP_TOKEN,
   username:   process.env.SOCRATA_USERNAME,
   password:   process.env.SOCRATA_PASSWORD
@@ -51,7 +59,7 @@ app.get('/waittimes', function(req, res){
   // console.log(queryString);
 
   console.log(req.query);
-  database.get(req.query, function(err, response, data){
+  waitDatabase.get(req.query, function(err, response, data){
 
     if(err){
       console.log(err.entity);
@@ -66,12 +74,24 @@ app.post('/waittimes', function(req, res){
 
   console.log(req.body);
 
-  database.post(req.body, function(err, response, record){
+  waitDatabase.post(req.body, function(err, response, record){
     if(err){
       console.log(err.entity);
       res.json(err.entity);
     }else{
       res.json(record);
+    }
+  });
+});
+
+app.get('/precincts', function(req, res){
+  console.log(req.query);
+  precinctDatabase.get(req.query, function(err, response, data){
+    if(err){
+      console.log(err.entity);
+      res.json(err.entity);
+    }else{
+      res.json(data);
     }
   });
 });

@@ -16,10 +16,6 @@
 })(jQuery);
 
 
-var state = $.QueryString['state'];
-var precinct = $.QueryString['precinct'];
-
-
 // { "timestamp": "2016-03-05T00:00:00", "precinct": "1", "waittime": 2, "reporterid": "e3f99640d60577f72086b54087423593", "state": "GA"}
 function addEstimate(precinctnum, state, email, waittime, callback){
   console.log("adding time");
@@ -93,10 +89,27 @@ function sendWait(time){
   });
 }
 
+function setLocation(state, precinct) {
+  window.state = state;
+  window.precinct = precinct;
+  $('.state-field').val(state);
+  $('.precinct-field').val(precinct);
+}
+
 $(document).ready(function(){
 
-    $('.state-field').val(state);
-    $('.precinct-field').val(precinct);
+
+  setLocation($.QueryString['state'], $.QueryString['precinct']);
+
+  if((!state || !precinct) && navigator.geolocation){
+    // try and get from geolocation
+    navigator.geolocation.getCurrentPosition(function(position){
+
+      console.log("got position", position);
+
+    });
+  }
+
 
   drawTime();
   setInterval(drawTime, 15*1000);
