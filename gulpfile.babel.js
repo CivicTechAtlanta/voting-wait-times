@@ -4,7 +4,8 @@ import gulpLoadPlugins from 'gulp-load-plugins';
 import browserSync from 'browser-sync';
 import del from 'del';
 import {stream as wiredep} from 'wiredep';
-import nodemon from 'gulp-nodemon';
+import webpack from 'webpack-stream';
+import modRewrite from 'connect-modrewrite';
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
@@ -24,28 +25,49 @@ gulp.task('styles', () => {
     .pipe(reload({stream: true}));
 });
 
-gulp.task('styles:dist', () => {
-  return gulp.src('app/styles/*.scss')
-    .pipe($.plumber())
-    .pipe($.sourcemaps.init())
-    .pipe($.sass.sync({
-      outputStyle: 'expanded',
-      precision: 10,
-      includePaths: ['.']
-    }).on('error', $.sass.logError))
-    .pipe($.if('*.css', $.cssnano()))
-    .pipe(gulp.dest('dist/styles'));
-});
+// gulp.task('styles:dist', () => {
+//   return gulp.src('app/styles/*.scss')
+//     .pipe($.plumber())
+//     .pipe($.sourcemaps.init())
+//     .pipe($.sass.sync({
+//       outputStyle: 'expanded',
+//       precision: 10,
+//       includePaths: ['.']
+//     }).on('error', $.sass.logError))
+//     .pipe($.if('*.css', $.cssnano()))
+//     .pipe(gulp.dest('dist/styles'));
+// });
 
 
 gulp.task('scripts', () => {
   return gulp.src('app/scripts/**/*.js')
     .pipe($.plumber())
     .pipe($.sourcemaps.init())
-    .pipe($.babel())
+    .pipe(webpack({
+      module: {
+        loaders: [
+          { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' },
+        ],
+      }
+    }))
+    .pipe($.concat('main.js'))
     .pipe($.sourcemaps.write('.'))
     .pipe(gulp.dest('.tmp/scripts'))
     .pipe(reload({stream: true}));
+});
+gulp.task('scripts:test', () => {
+  return gulp.src('test/spec/**/*.js')
+    .pipe($.plumber())
+    .pipe(webpack({
+      module: {
+        loaders: [
+          { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' },
+        ],
+      }
+    }))
+    .pipe($.concat('test.js'))
+    .pipe(gulp.dest('test/.tmp'));
+    // .pipe(reload({stream: true}));
 });
 
 function lint(files, options) {
@@ -64,9 +86,9 @@ const testLintOptions = {
 };
 
 gulp.task('lint', lint('app/scripts/**/*.js'));
-gulp.task('lint:test', lint('test/spec/**/*.js', testLintOptions));
+// gulp.task('lint:test', lint('test/spec/**/*.js', testLintOptions));
 
-gulp.task('html', ['styles:dist', 'scripts'], () => {
+gulp.task('html', ['styles', 'scripts'], () => {
   return gulp.src('app/*.html')
     .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
     .pipe($.if('*.js', $.uglify()))
@@ -105,12 +127,21 @@ gulp.task('extras', () => {
 
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
-gulp.task('serve', ['styles', 'scripts', 'fonts', 'nodemon'], () => {
+gulp.task('serve', ['styles', 'scripts', 'fonts'], () => {
   browserSync({
     notify: false,
-    port: 7000,
-    proxy: "http://localhost:5000",
-    serveStatic: ['.tmp', 'app', '.']
+    port: 9000,
+    server: {
+      baseDir: ['.tmp', 'app'],
+      routes: {
+        '/bower_components': 'bower_components'
+      },
+      middleware: [
+        //single-page app:
+        //  https://github.com/BrowserSync/browser-sync/issues/204#issuecomment-212183745
+        modRewrite(['!\\.\\w+$ /index.html [L]'])
+      ]
+    }
   });
 
   gulp.watch([
@@ -125,22 +156,17 @@ gulp.task('serve', ['styles', 'scripts', 'fonts', 'nodemon'], () => {
   gulp.watch('bower.json', ['wiredep', 'fonts']);
 });
 
-// start the server (https://gist.github.com/sogko/b53d33d4f3b40d3b4b2e)
-gulp.task('nodemon', function (cb) {
-  var started = false;
-  return nodemon({
-    script: 'server.js'
-  }).on('start', function () {
-    // to avoid nodemon being started multiple times
-    // thanks @matthisk
-    if (!started) {
-      cb();
-      started = true; 
-    } 
+gulp.task('serve:dist', () => {
+  browserSync({
+    notify: false,
+    port: 9000,
+    server: {
+      baseDir: ['dist']
+    }
   });
 });
 
-gulp.task('serve:test', ['scripts'], () => {
+gulp.task('serve:test', ['scripts', 'scripts:test'], () => {
   browserSync({
     notify: false,
     port: 9000,
@@ -154,8 +180,8 @@ gulp.task('serve:test', ['scripts'], () => {
     }
   });
 
-  gulp.watch('app/scripts/**/*.js', ['scripts']);
-  gulp.watch('test/spec/**/*.js').on('change', reload);
+  gulp.watch('app/scripts/**/*.js', ['scripts', 'scripts:test']).on('change', reload);
+  gulp.watch('test/spec/**/*.js', ['scripts:test']).on('change', reload);
   // gulp.watch('test/spec/**/*.js', ['lint:test']);
 });
 
@@ -175,7 +201,7 @@ gulp.task('wiredep', () => {
     .pipe(gulp.dest('app'));
 });
 
-gulp.task('build', [/*'lint',*/ 'html', 'images', 'fonts', 'extras'], () => {
+gulp.task('build', ['lint', 'html', 'images', 'fonts', 'extras'], () => {
   return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
 });
 

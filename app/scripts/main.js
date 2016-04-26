@@ -1,126 +1,180 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 
-//http://stackoverflow.com/a/3855394
-(function($) {
-    $.QueryString = (function(a) {
-        if (a == "") return {};
-        var b = {};
-        for (var i = 0; i < a.length; ++i)
-        {
-            var p=a[i].split('=');
-            if (p.length != 2) continue;
-            b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
-        }
-        return b;
-    })(window.location.search.substr(1).split('&'))
-})(jQuery);
+import App from './app';
 
 
-// { "timestamp": "2016-03-05T00:00:00", "precinct": "1", "waittime": 2, "reporterid": "e3f99640d60577f72086b54087423593", "state": "GA"}
-function addEstimate(precinctnum, state, email, waittime, callback){
-  console.log("adding time");
-  $.ajax({
-    method: 'POST',
-    url: '/waittimes',
-    data: JSON.stringify({
-      precinct: precinctnum,
-      state: state,
-      reporterid: md5(email),
-      waittime: waittime,
-      timestamp: new Date().toISOString()
-    }),
-    contentType: 'application/json',
-    dataType: 'json',
-    success: null
-  }).then(callback);
-}
-
-function getTime(precinctnum, state, callback){
-  console.log("getting time");
-  $.ajax({
-    method: 'GET',
-    url: '/waittimes',
-    data: {
-      where: 'precinct = '+precinctnum+' AND state = \''+state+'\'',
-      order: 'timestamp DESC',
-      limit: 1
-    },
-    dataType: 'json'
-  }).then(callback);
-}
+ReactDOM.render(<App />, document.getElementById('container'));
 
 
-var waitTimeMap = [
-  "No Line (whoo hoo!)",
-  "Small Line (Less than 10 min)",
-  "Medium Line (10-45 min)",
-  "Long Line (Over 45 min)"
-];
+// let pageId = window.location.pathname.substring(1); //.hash.substring(1);
 
-function drawTime() {
+// if(pageId.length < 1){
+//   pageId = (new Date()).getTime().toString();
+//   window.location.pathname = pageId; //.hash = pageId;
+// }
 
-    console.log("updating...");
+// const fb = new Firebase('https://pgflashcards.firebaseio.com');
 
-    getTime(precinct, state, function(res){
+// fb.child('.info/connected').on('value', snapshot => {
+//   if(!snapshot.val()){
+//     console.warn('No connection, falling back to local storage');
+//     const state = window.localStorage[pageId];
+//     if(state){
+//       render(JSON.parse(state));
+//     }else{
+//       render([]);
+//     }
+//   }else{
+//     console.log('connected to Firebase');
+//   }
+// });
 
-      console.log("got data", res);
+// const db = fb.child(pageId);
 
-      $('.precinct-name').text(state + " Precinct "+precinct);
+// function render(cards){
+//   ReactDOM.render(<ViewCardApp db={db} cards={cards || []} />, document.getElementById('container'));
+// }
 
-      if(res[0]){
-        var time = res[res.length-1];
-        $('.wait-time').text(waitTimeMap[time.waittime]);
-
-        $('.last-updated').text(new Date(time.timestamp).toRelativeString());
-      }else{
-        $('.wait-time').text("Unknown");
-
-        $('.last-updated').text("Never");
-      }
-    });
-}
-
-
-function sendWait(time){
-  var email = $('.email-field').val();
-
-  addEstimate(precinct, state, email, time, function(){
-    drawTime();
-  });
-}
-
-function setLocation(state, precinct) {
-  window.state = state;
-  window.precinct = precinct;
-  $('.state-field').val(state);
-  $('.precinct-field').val(precinct);
-}
-
-$(document).ready(function(){
+// db.once('value', firstSnapshot => {
+//   let firstCards = firstSnapshot.val();
+//   if(firstCards === null){
+//     defaultQuestions.forEach(q => {
+//       db.push({question: q, answer: ''});
+//     });
+//   }
+//   db.on('value', snapshot => {
+//     const cards = snapshot.val();
+//     localStorage[pageId] = JSON.stringify(cards);
+//     render(cards);
+//   });
+// });
 
 
-  setLocation($.QueryString['state'], $.QueryString['precinct']);
-
-  if((!state || !precinct) && navigator.geolocation){
-    // try and get from geolocation
-    navigator.geolocation.getCurrentPosition(function(position){
-
-      console.log("got position", position);
-
-    });
-  }
 
 
-  drawTime();
-  setInterval(drawTime, 15*1000);
+// //http://stackoverflow.com/a/3855394
+// (function($) {
+//     $.QueryString = (function(a) {
+//         if (a == "") return {};
+//         var b = {};
+//         for (var i = 0; i < a.length; ++i)
+//         {
+//             var p=a[i].split('=');
+//             if (p.length != 2) continue;
+//             b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+//         }
+//         return b;
+//     })(window.location.search.substr(1).split('&'))
+// })(jQuery);
 
-  $('.btn-wait').click(function(){
-    var wait = $(this).attr('wait');
 
-    console.log("submit", wait);
+// // { "timestamp": "2016-03-05T00:00:00", "precinct": "1", "waittime": 2, "reporterid": "e3f99640d60577f72086b54087423593", "state": "GA"}
+// function addEstimate(precinctnum, state, email, waittime, callback){
+//   console.log("adding time");
+//   $.ajax({
+//     method: 'POST',
+//     url: '/waittimes',
+//     data: JSON.stringify({
+//       precinct: precinctnum,
+//       state: state,
+//       reporterid: md5(email),
+//       waittime: waittime,
+//       timestamp: new Date().toISOString()
+//     }),
+//     contentType: 'application/json',
+//     dataType: 'json',
+//     success: null
+//   }).then(callback);
+// }
 
-    sendWait(wait);
-  });
+// function getTime(precinctnum, state, callback){
+//   console.log("getting time");
+//   $.ajax({
+//     method: 'GET',
+//     url: '/waittimes',
+//     data: {
+//       where: 'precinct = '+precinctnum+' AND state = \''+state+'\'',
+//       order: 'timestamp DESC',
+//       limit: 1
+//     },
+//     dataType: 'json'
+//   }).then(callback);
+// }
 
-  // $('.btn-panic')
-});
+
+// var waitTimeMap = [
+//   "No Line (whoo hoo!)",
+//   "Small Line (Less than 10 min)",
+//   "Medium Line (10-45 min)",
+//   "Long Line (Over 45 min)"
+// ];
+
+// function drawTime() {
+
+//     console.log("updating...");
+
+//     getTime(precinct, state, function(res){
+
+//       console.log("got data", res);
+
+//       $('.precinct-name').text(state + " Precinct "+precinct);
+
+//       if(res[0]){
+//         var time = res[res.length-1];
+//         $('.wait-time').text(waitTimeMap[time.waittime]);
+
+//         $('.last-updated').text(new Date(time.timestamp).toRelativeString());
+//       }else{
+//         $('.wait-time').text("Unknown");
+
+//         $('.last-updated').text("Never");
+//       }
+//     });
+// }
+
+
+// function sendWait(time){
+//   var email = $('.email-field').val();
+
+//   addEstimate(precinct, state, email, time, function(){
+//     drawTime();
+//   });
+// }
+
+// function setLocation(state, precinct) {
+//   window.state = state;
+//   window.precinct = precinct;
+//   $('.state-field').val(state);
+//   $('.precinct-field').val(precinct);
+// }
+
+// $(document).ready(function(){
+
+
+//   setLocation($.QueryString['state'], $.QueryString['precinct']);
+
+//   if((!state || !precinct) && navigator.geolocation){
+//     // try and get from geolocation
+//     navigator.geolocation.getCurrentPosition(function(position){
+
+//       console.log("got position", position);
+
+//     });
+//   }
+
+
+//   drawTime();
+//   setInterval(drawTime, 15*1000);
+
+//   $('.btn-wait').click(function(){
+//     var wait = $(this).attr('wait');
+
+//     console.log("submit", wait);
+
+//     sendWait(wait);
+//   });
+
+//   // $('.btn-panic')
+// });
