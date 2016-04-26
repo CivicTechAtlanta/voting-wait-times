@@ -4,7 +4,7 @@ var url = require('url');
 var Socrata = require('node-socrata');
 var BodyParser = require('body-parser');
 
-var PRODUCTION = (process.env.ENVIRONMENT === 'production');
+var PRODUCTION = (process.env.NODE_ENV === 'production');
 
 
 if(!PRODUCTION){
