@@ -5,7 +5,9 @@
     "js-md5": "md5#^0.3.0",
     "bootstrap-sass": "bootstrap-sass-official#^3.3.6",
     "modernizr": "~2.8.1",
-    "natural_dates": "natural-dates#^0.1.2"
+    "natural_dates": "natural-dates#^0.1.2",
+    "firebase": "^2.4.2",
+    "handlebars": "^4.0.5"
   },
   "overrides": {
     "bootstrap-sass": {

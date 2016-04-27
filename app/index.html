@@ -16,7 +16,7 @@
     <!-- endbower -->
     <!-- endbuild -->
 
-    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="/styles/main.css">
 
     <!-- build:js scripts/vendor/modernizr.js -->
     <script src="/bower_components/modernizr/modernizr.js"></script>
@@ -39,63 +39,90 @@
 
       <!-- redesigned layout -->
 
-        <!-- Buttons for wait times -->
+      <section id="404">
+        
+        <div class="jumbotron">
+          <h1>Oops...</h1>
+          <p>
+            We couldn't find the page you are looking for.
+          </p>
+        </div>
+
+      </section><!-- end 404 section -->
+
+      <section id="precinct-info">
         <div class="jumbotron">
           <h1>Polling Station Wait Times</h1>
 
           <div class="wait-time-block">
 
             <h1 class="precinct-name">Precinct Name</h1>
-            <!-- <h4 class="wait-time-label">Wait Time: <span class="wait-time label label-default">RED</span></h4> -->
             <div class="panel panel-default">
-              <div class="wait-time panel-heading"><h4 class="wait-time-label">Wait Time: RED</h4></div>
+              <div class="wait-time panel-heading">
+                <h4 class="wait-time-label">Wait Time:</h4>
+                <h4 class="wait-time">RED</h4>
+              </div>
               <div class="panel-body"> 
                 <span class="last-updated-label">Last Updated: </span>
-                <span class="last-updated">2:15</span>
+                <span class="last-updated">5 minutes ago</span>
               </div>
             </div>
-            
           </div>
 
-        </br>
+          </br>
 
           <p class="lead">Select the button that reflects the approximate wait time at this polling station right now.</p>
-          <button type="New Game" class="btn btn-primary btn-block btn-wait" wait="0" role="button">No Line (whoo hoo!)</button></br>
-          <button type="New Game" class="btn btn-success btn-block btn-wait" wait="1" role="button">Small Line (Less than 10 min)</button></br>
-          <button type="New Game" class="btn btn-info btn-block btn-wait" wait="2" role="button">Medium Line (10-45 min)</button></br>
-          <button type="New Game" class="btn btn-warning btn-block btn-wait" wait="3" role="button">Long Line (Over 45 min)</button></br>
-          <button type="New Game" class="btn btn-danger btn-block btn-panic" role="button">Panic, help!</button></br>
+          <button class="btn btn-primary btn-block btn-wait" wait="0" role="button">No Line (whoo hoo!)</button>
+          </br>
+          <button class="btn btn-success btn-block btn-wait" wait="1" role="button">Small Line (Less than 10 min)</button>
+          </br>
+          <button class="btn btn-warning btn-block btn-wait" wait="2" role="button">Medium Line (10-45 min)</button>
+          </br>
+          <button class="btn btn-danger  btn-block btn-wait" wait="3" role="button">Long Line (Over 45 min)</button>
+          </br>
+          <!-- <button class="btn btn-danger btn-block btn-panic" role="button">Panic, help!</button></br> -->
         </div>
+      </section><!-- end precinct-info section -->
 
-        <hr/>
+      <section id="admin">
+        <div class="row" id="admin-container">
 
-                  <!-- User role form -->
+          <div class="btn admin-box" id="admin-template" style="display: none;" href="#">
+            <div class="col-sm-4 col-md-3 col-lg-1">
+              <h1 class="precinct-name">Precinct Name</h1>
+              <p>
+                <h4 class="wait-time-label">Wait Time:</h4>
+                <h4 class="wait-time">RED</h4>
+                <span class="last-updated-label">Last Updated: </span>
+                <span class="last-updated">5 minutes ago</span>
+              </p>
+            </div>
+          </>
 
-      <div class="well well-lg centerfy">
+        </div>
+      </section><!-- end admin section -->
 
-            <form class="user-form">
-              <h3>Select whether you are:</h3>
-              <button type="New Game" class="btn btn-primary btn-lg" role="button">A Volunteer</button>
-              <button type="New Game" class="btn btn-primary btn-lg" role="button">A Voter (non-volunteer)</button>
-              </br>
+      <section id="register">
+        <div class="well well-lg centerfy">
+          <form class="user-form">
+            <h3>Select whether you are:</h3>
+            <button class="btn btn-primary btn-lg" role="button">A Volunteer</button>
+            <button class="btn btn-primary btn-lg" role="button">A Voter (non-volunteer)</button>
+            </br>
 
-              <!-- <hr/> -->
-
-           <!-- User registration form -->
-
-              <div class="row">
-                <div class="form-group col-xs-12">
-                  <input  class="text email-field form-control" type="text" name="userForm" id="userForm" autocomplete="off" placeholder="Enter your email" required/>
+            <div class="row">
+              <div class="form-group col-xs-12">
+                <input  class="text email-field form-control" type="text" name="userForm" id="userForm" autocomplete="off" placeholder="Enter your email" required/>
+            
+                <input type="text" name="userForm" id="userForm" class="text precinct-field form-control" maxlength="3" autocomplete="off" placeholder="Your precinct #" required/>
               
-                  <input type="text" name="userForm" id="userForm" class="text precinct-field form-control" maxlength="3" autocomplete="off" placeholder="Your precinct #" required/>
-                
-                  <input type="text" name="userForm" id="userForm" class="text state-field form-control" maxlength="2" autocomplete="off" placeholder="Your state" required/>
-                </div>                 
-              </div><!-- end row -->
-                
-            </form>
-      </div><!-- end well -->
-
+                <input type="text" name="userForm" id="userForm" class="text state-field form-control" maxlength="2" autocomplete="off" placeholder="Your state" required/>
+              </div>                 
+            </div>
+              
+          </form>
+        </div>
+      </section><!-- end register section -->
 
     </div><!-- end container -->
 
@@ -105,6 +132,8 @@
     <script src="/bower_components/jquery/dist/jquery.js"></script>
     <script src="/bower_components/js-md5/build/md5.min.js"></script>
     <script src="/bower_components/natural_dates/natural_dates.js"></script>
+    <script src="/bower_components/firebase/firebase.js"></script>
+    <script src="/bower_components/handlebars/handlebars.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -124,7 +153,10 @@
     <!-- endbuild -->
 
     <!-- build:js scripts/main.js -->
-    <script src="scripts/main.js"></script>
+    <script src="/scripts/main.js"></script>
+    <script src="/scripts/admin.js"></script>
+    <script src="/scripts/precinct.js"></script>
+    <script src="/scripts/404.js"></script>
     <!-- endbuild -->
   </body>
 </html>
