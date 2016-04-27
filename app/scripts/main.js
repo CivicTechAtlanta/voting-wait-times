@@ -12,9 +12,15 @@ window.app = (function($, Firebase){
   App.prototype.route = function(path){
     for(var i = 0; i < this.routes.length; i++){
       var route = this.routes[i];
-      var matches = path.match(route.pattern);
+      var keys = route.pattern.match(/:[^\/]+/g);
+      var pattern = new RegExp(route.pattern.replace(/:[^\/]+/g, '([^\/]+)'));
+      var matches = path.match(pattern);
       if(matches){
-        route.callback(matches);
+        var data = {};
+        for(var j = 1; j < matches.length; j++){
+          data[keys[j-1]] = matches[j];
+        }
+        route.callback(data);
         return;
       }
     }

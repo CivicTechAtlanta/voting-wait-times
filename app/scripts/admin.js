@@ -1,6 +1,6 @@
 (function(app, $){
 
-  app.addRoute(/\/admin/, function(){
+  app.addRoute('/admin', function(){
 
     console.log('TODO: admin');
 
