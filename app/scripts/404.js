@@ -1,7 +1,7 @@
 (function(app, $){
-  
+
   app.fallthroughRoute = function(){
-    $('#404').show();
+    app.render(app.compile('error'));
   };
 
 })(window.app, window.jQuery);

@@ -39,69 +39,6 @@
 
       <!-- redesigned layout -->
 
-      <section id="404">
-        
-        <div class="jumbotron">
-          <h1>Oops...</h1>
-          <p>
-            We couldn't find the page you are looking for.
-          </p>
-        </div>
-
-      </section><!-- end 404 section -->
-
-      <section id="precinct-info">
-        <div class="jumbotron">
-          <h1>Polling Station Wait Times</h1>
-
-          <div class="wait-time-block">
-
-            <h1 class="precinct-name">Precinct Name</h1>
-            <div class="panel panel-default">
-              <div class="wait-time panel-heading">
-                <h4 class="wait-time-label">Wait Time:</h4>
-                <h4 class="wait-time">RED</h4>
-              </div>
-              <div class="panel-body"> 
-                <span class="last-updated-label">Last Updated: </span>
-                <span class="last-updated">5 minutes ago</span>
-              </div>
-            </div>
-          </div>
-
-          </br>
-
-          <p class="lead">Select the button that reflects the approximate wait time at this polling station right now.</p>
-          <button class="btn btn-primary btn-block btn-wait" wait="0" role="button">No Line (whoo hoo!)</button>
-          </br>
-          <button class="btn btn-success btn-block btn-wait" wait="1" role="button">Small Line (Less than 10 min)</button>
-          </br>
-          <button class="btn btn-warning btn-block btn-wait" wait="2" role="button">Medium Line (10-45 min)</button>
-          </br>
-          <button class="btn btn-danger  btn-block btn-wait" wait="3" role="button">Long Line (Over 45 min)</button>
-          </br>
-          <!-- <button class="btn btn-danger btn-block btn-panic" role="button">Panic, help!</button></br> -->
-        </div>
-      </section><!-- end precinct-info section -->
-
-      <section id="admin">
-        <div class="row" id="admin-container">
-
-          <div class="btn admin-box" id="admin-template" style="display: none;" href="#">
-            <div class="col-sm-4 col-md-3 col-lg-1">
-              <h1 class="precinct-name">Precinct Name</h1>
-              <p>
-                <h4 class="wait-time-label">Wait Time:</h4>
-                <h4 class="wait-time">RED</h4>
-                <span class="last-updated-label">Last Updated: </span>
-                <span class="last-updated">5 minutes ago</span>
-              </p>
-            </div>
-          </>
-
-        </div>
-      </section><!-- end admin section -->
-
       <section id="register">
         <div class="well well-lg centerfy">
           <form class="user-form">
@@ -154,6 +91,7 @@
 
     <!-- build:js scripts/main.js -->
     <script src="/scripts/main.js"></script>
+    <script src="/scripts/templates.js"></script>
     <script src="/scripts/admin.js"></script>
     <script src="/scripts/precinct.js"></script>
     <script src="/scripts/404.js"></script>
