@@ -19,7 +19,9 @@ Click [here](https://slack.codeforatlanta.org) to join the Code for Atlanta Slac
 
 2. [Install Node.js](https://nodejs.org/en/)
 
-3. Download project and dependencies:
+3. Download project and dependencies
+
+commands:
 
     [sudo] npm install -g gulp bower
     git clone https://github.com/[YOUR-GITHUB-USERNAME]/voting-wait-times.git
