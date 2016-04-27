@@ -37,49 +37,67 @@
         <h3 class="text-muted">Voting Wait Times</h3>
       </div> -->
 
+      <!-- redesigned layout -->
 
-      <div class="wait-time-block">
+        <!-- Buttons for wait times -->
+        <div class="jumbotron">
+          <h1>Polling Station Wait Times</h1>
 
-        <h3 class="precinct-name">Precinct Name</h3>
-        <h5 class="wait-time-label">Wait Time:</h5>
-        <span class="wait-time label label-default">RED</span>
-        <br/>
-        <span class="last-updated-label">Last Updated: </span>
-        <span class="last-updated">2:15</span>
-      </div>
+          <div class="wait-time-block">
 
-      <hr/>
+            <h1 class="precinct-name">Precinct Name</h1>
+            <!-- <h4 class="wait-time-label">Wait Time: <span class="wait-time label label-default">RED</span></h4> -->
+            <div class="panel panel-default">
+              <div class="wait-time panel-heading"><h4 class="wait-time-label">Wait Time: RED</h4></div>
+              <div class="panel-body"> 
+                <span class="last-updated-label">Last Updated: </span>
+                <span class="last-updated">2:15</span>
+              </div>
+            </div>
+            
+          </div>
 
+        </br>
 
-      <!-- Buttons for wait times -->
-      <div class="jumbotron">
-        <h1>Polling Station Wait Times</h1>
-
-        <!-- User role form -->
-
-          <form class="user-form">
-            <p>Select whether you are:</p>
-            <button type="New Game" class="btn btn-primary" role="button">A Volunteer</button>
-            <button type="New Game" class="btn btn-primary" role="button">A Voter (non-volunteer)</button>
-         </form>
-
-         <!-- User registration form -->
-        <div class="col-md-4 col-md-4 col-md-4 col-xs-12">
-            <input type="text" name="userForm" id="userForm" class="text email-field" autocomplete="off" placeholder="Enter your email" required/>
-            <input type="text" name="userForm" id="userForm" class="text precinct-field" maxlength="3" autocomplete="off" placeholder="Your precinct #" required/>
-            <input type="text" name="userForm" id="userForm" class="text state-field" maxlength="2" autocomplete="off" placeholder="Your state" required/>
+          <p class="lead">Select the button that reflects the approximate wait time at this polling station right now.</p>
+          <button type="New Game" class="btn btn-primary btn-block btn-wait" wait="0" role="button">No Line (whoo hoo!)</button></br>
+          <button type="New Game" class="btn btn-success btn-block btn-wait" wait="1" role="button">Small Line (Less than 10 min)</button></br>
+          <button type="New Game" class="btn btn-info btn-block btn-wait" wait="2" role="button">Medium Line (10-45 min)</button></br>
+          <button type="New Game" class="btn btn-warning btn-block btn-wait" wait="3" role="button">Long Line (Over 45 min)</button></br>
+          <button type="New Game" class="btn btn-danger btn-block btn-panic" role="button">Panic, help!</button></br>
         </div>
 
-        <p class="lead">Select the button that reflects the approximate wait time at this polling station right now.</p>
-        <button type="New Game" class="btn btn-primary btn-wait" wait="0" role="button">No Line (whoo hoo!)</button>
-        <button type="New Game" class="btn btn-success btn-wait" wait="1" role="button">Small Line (Less than 10 min)</button>
-        <button type="New Game" class="btn btn-info btn-wait" wait="2" role="button">Medium Line (10-45 min)</button>
-        <button type="New Game" class="btn btn-warning btn-wait" wait="3" role="button">Long Line (Over 45 min)</button>
-        <button type="New Game" class="btn btn-danger btn-panic" role="button">Panic, help!</button>
-      </div>
+        <hr/>
+
+                  <!-- User role form -->
+
+      <div class="well well-lg centerfy">
+
+            <form class="user-form">
+              <h3>Select whether you are:</h3>
+              <button type="New Game" class="btn btn-primary btn-lg" role="button">A Volunteer</button>
+              <button type="New Game" class="btn btn-primary btn-lg" role="button">A Voter (non-volunteer)</button>
+              </br>
+
+              <!-- <hr/> -->
+
+           <!-- User registration form -->
+
+              <div class="row">
+                <div class="form-group col-xs-12">
+                  <input  class="text email-field form-control" type="text" name="userForm" id="userForm" autocomplete="off" placeholder="Enter your email" required/>
+              
+                  <input type="text" name="userForm" id="userForm" class="text precinct-field form-control" maxlength="3" autocomplete="off" placeholder="Your precinct #" required/>
+                
+                  <input type="text" name="userForm" id="userForm" class="text state-field form-control" maxlength="2" autocomplete="off" placeholder="Your state" required/>
+                </div>                 
+              </div><!-- end row -->
+                
+            </form>
+      </div><!-- end well -->
 
 
-    </div>
+    </div><!-- end container -->
 
 
     <!-- build:js scripts/vendor.js -->
