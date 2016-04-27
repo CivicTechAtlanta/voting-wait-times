@@ -16,7 +16,7 @@
     <!-- endbower -->
     <!-- endbuild -->
 
-    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="/styles/main.css">
 
     <!-- build:js scripts/vendor/modernizr.js -->
     <script src="/bower_components/modernizr/modernizr.js"></script>
@@ -39,6 +39,18 @@
 
       <!-- redesigned layout -->
 
+      <section id="404">
+        
+        <div class="jumbotron">
+          <h1>Oops...</h1>
+          <p>
+            We couldn't find the page you are looking for.
+          </p>
+        </div>
+
+      </section>
+
+      <section id="precinct-info">
         <!-- Buttons for wait times -->
         <div class="jumbotron">
           <h1>Polling Station Wait Times</h1>
@@ -66,30 +78,34 @@
           <button class="btn btn-warning btn-block btn-wait" wait="3" role="button">Long Line (Over 45 min)</button></br>
           <button class="btn btn-danger btn-block btn-panic" role="button">Panic, help!</button></br>
         </div>
+      </section>
 
-        <!-- <hr/> -->
+      <section id="admin">
+        
+      </section>
 
-<!--       <div class="well well-lg centerfy">
+      <section id="register">
+        <div class="well well-lg centerfy">
 
-            <form class="user-form">
-              <h3>Select whether you are:</h3>
-              <button class="btn btn-primary btn-lg" role="button">A Volunteer</button>
-              <button class="btn btn-primary btn-lg" role="button">A Voter (non-volunteer)</button>
-              </br>
+              <form class="user-form">
+                <h3>Select whether you are:</h3>
+                <button class="btn btn-primary btn-lg" role="button">A Volunteer</button>
+                <button class="btn btn-primary btn-lg" role="button">A Voter (non-volunteer)</button>
+                </br>
 
-              <div class="row">
-                <div class="form-group col-xs-12">
-                  <input  class="text email-field form-control" type="text" name="userForm" id="userForm" autocomplete="off" placeholder="Enter your email" required/>
-              
-                  <input type="text" name="userForm" id="userForm" class="text precinct-field form-control" maxlength="3" autocomplete="off" placeholder="Your precinct #" required/>
+                <div class="row">
+                  <div class="form-group col-xs-12">
+                    <input  class="text email-field form-control" type="text" name="userForm" id="userForm" autocomplete="off" placeholder="Enter your email" required/>
                 
-                  <input type="text" name="userForm" id="userForm" class="text state-field form-control" maxlength="2" autocomplete="off" placeholder="Your state" required/>
-                </div>                 
-              </div>
-                
-            </form>
-      </div> -->
-
+                    <input type="text" name="userForm" id="userForm" class="text precinct-field form-control" maxlength="3" autocomplete="off" placeholder="Your precinct #" required/>
+                  
+                    <input type="text" name="userForm" id="userForm" class="text state-field form-control" maxlength="2" autocomplete="off" placeholder="Your state" required/>
+                  </div>                 
+                </div>
+                  
+              </form>
+        </div>
+      </section>
 
     </div><!-- end container -->
 
@@ -99,6 +115,7 @@
     <script src="/bower_components/jquery/dist/jquery.js"></script>
     <script src="/bower_components/js-md5/build/md5.min.js"></script>
     <script src="/bower_components/natural_dates/natural_dates.js"></script>
+    <script src="/bower_components/firebase/firebase.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -118,7 +135,10 @@
     <!-- endbuild -->
 
     <!-- build:js scripts/main.js -->
-    <script src="scripts/main.js"></script>
+    <script src="/scripts/main.js"></script>
+    <script src="/scripts/admin.js"></script>
+    <script src="/scripts/precinct.js"></script>
+    <script src="/scripts/404.js"></script>
     <!-- endbuild -->
   </body>
 </html>
