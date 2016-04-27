@@ -21,6 +21,22 @@ section {
   display: none; // hide sections by default
 }
 
+.admin-box {
+
+}
+.admin-box[wait="0"]{
+  background-color: green;
+}
+.admin-box[wait="1"]{
+  background-color: yellow;
+}
+.admin-box[wait="2"]{
+  background-color: orange;
+}
+.admin-box[wait="3"]{
+  background-color: red;
+}
+
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
 .marketing,
