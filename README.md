@@ -1,10 +1,10 @@
 # Voting Wait Times App
 
-This is a [CodeAcross Atlanta 2016](https://nvite.com/CodeAcross/b1aa) project championed by the [New Georgia Project](http://newgeorgiaproject.org/) and hosted by [Code for Atlanta](http://www.codeforatlanta.org/). 
+This is a project championed by the [New Georgia Project](http://newgeorgiaproject.org/) and hosted by [Code for Atlanta](http://www.codeforatlanta.org/) originally started at [CodeAcross Atlanta 2016](https://nvite.com/CodeAcross/b1aa). 
 
-The goal is to crowd-source wait times at voting precincts. The data is openly available on [Socrata](https://brigades.opendatanetwork.com/OPEN-DATA-SHARING-PLATFORM/Voting-Wait-Times/ikiz-kvvr), although currently it only contains test data.
+The goal is to crowd-source wait times at voting precincts.
 
-This application is a webapp with a small amount of Node.js server code.
+This application is a static HTML web app using [Firebase](https://firebase.com).
 
 # Project Chat
 
@@ -15,8 +15,14 @@ Click [here](https://slack.codeforatlanta.org) to join the Code for Atlanta Slac
 
 ### Installing
 
+1. [Fork the project](https://github.com/codeforatlanta/voting-wait-times#fork-destination-box)
+
+2. [Install Node.js](https://nodejs.org/en/)
+
+3. Download project and dependencies:
+
     [sudo] npm install -g gulp bower
-    git clone https://github.com/codeforatlanta/voting-wait-times.git
+    git clone https://github.com/[YOUR-GITHUB-USERNAME]/voting-wait-times.git
     cd voting-wait-times
     npm install
     bower install
@@ -27,5 +33,8 @@ Click [here](https://slack.codeforatlanta.org) to join the Code for Atlanta Slac
 
 This gulp task will run the server, open the app in the browser, and automatically reload when changes are made.
 
-Running the server requires several environment variables to be set, which are stored in a `.env` file. This file
-is not included in the repository for security reasons. 
+### TODO
+
+- Fix admin page design
+- Add way to look up precincts (geolocation, address lookup, search, ...)
+- Document code structure
