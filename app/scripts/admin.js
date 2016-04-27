@@ -9,7 +9,7 @@
 
   function createOrUpdatePrecinct(data){
     var id = data.state+'-'+data.county+'-'+data.precinct;
-    var box = $('#'+id); //$('#admin-container [precinct|='+id+']');
+    var box = $('#'+id);
     if(box.length === 0){
       box = $('#admin-template').clone();
       box.attr('precinct', id);
@@ -55,12 +55,11 @@
       createOrUpdatePrecinct(snapshot.val());
       sort();
     });
-    // waitNode.on('child_removed', function(snapshot){
-    //   // remove precint
-    //   console.log("removed", snapshot.val());
-    //   $('#admin-container').remove(createOrUpdatePrecinct(snapshot.val()));
-    // });
-
+    waitNode.on('child_removed', function(snapshot){
+      // remove precint
+      var id = data.state+'-'+data.county+'-'+data.precinct;
+      $('#admin-container').remove($('#'+id));
+    });
   });
 
 })(window.app, window.jQuery);
