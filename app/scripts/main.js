@@ -61,6 +61,7 @@ window.app = (function($, Firebase){
   // once all the javascript is loaded and ready to go
   $(document).ready(function(){
     // route the request
+    console.log('route');
     app.route(window.location.pathname);
   });
 

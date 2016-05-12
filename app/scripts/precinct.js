@@ -28,29 +28,35 @@
     var timeUpdateInterval = null;
 
     // when a wait time button is clicked
-    console.log(element, element.find('.btn-wait'));
-    element.find('.btn-wait').click(function(){
+    // console.log(element, element.find('.btn-wait'));
+    console.log('prepare', $(element));
 
-      console.log('click');
+    function addButtonListeners(element){
+        $(element).find('.btn-wait').click(function(){
 
-      // the severity of the wait is pulled from the 'wait' attribute on the button html
-      var wait = $(this).attr('wait');
+          console.log('click');
 
-      // create a new wait time estimate at this moment
-      // TODO: Authentication - don't let just anyone submit times
-      var newNode = waitNode.push({
-        timestamp: new Date().toISOString(),
-        wait: wait,
-        state: state,
-        county: county,
-        precinct: precinctId
-      });
+          // the severity of the wait is pulled from the 'wait' attribute on the button html
+          var wait = $(this).attr('wait');
 
-      // update the precinct with the latest wait id
-      precinctNode.update({lastWait: newNode.key()});
+          // create a new wait time estimate at this moment
+          // TODO: Authentication - don't let just anyone submit times
+          var newNode = waitNode.push({
+            timestamp: new Date().toISOString(),
+            wait: wait,
+            state: state,
+            county: county,
+            precinct: precinctId
+          });
 
-      // updating the data will cause on('value') to be called, so we don't have to draw the new data
-    });
+          // update the precinct with the latest wait id
+          precinctNode.update({lastWait: newNode.key()});
+
+          // updating the data will cause on('value') to be called, so we don't have to draw the new data
+        });
+    }
+
+    addButtonListeners(element);
 
     // get basic precinct data
     precinctNode.on('value', function(valSnapshot){
@@ -62,11 +68,12 @@
         waitNode.child(precinct.lastWait).once('value', function(waitSnapshot){
           var waitTime = waitSnapshot.val();
           // update wait time
-          app.render(app.compile('precinct_full', {
+          var element = app.render(app.compile('precinct_full', {
             name: precinct.name,
             wait: waitMap[waitTime.wait],
             lastUpdated: new Date(waitTime.timestamp).toRelativeString()
           }));
+          addButtonListeners(element); // re-add listeners
 
           //update last updated. we do this on an interval so the time updates regularly
           // (e.g. 3 minutes ago, 4 minutes ago, ...)
