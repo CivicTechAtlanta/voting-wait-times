@@ -16,6 +16,9 @@
         "assets/fonts/bootstrap/*",
         "assets/javascripts/bootstrap.js"
       ]
+    },
+    "handlebars": {
+      "main": "bower_components/handlebars/handlebars.runtime.js"
     }
   },
   "devDependencies": {

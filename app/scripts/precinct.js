@@ -1,24 +1,25 @@
 (function(app, $){
 
-  // convert an integer wait time severity to a string
-  var waitTimeMap = [
+  var waitMap = [
     'No Line (whoo hoo!)',
     'Small Line (Less than 10 min)',
     'Medium Line (10-45 min)',
     'Long Line (Over 45 min)'
   ];
 
-  app.addRoute('/precincts/:state/:county/:precinctId', '#precinct-info', function(data){
+  app.addRoute('/precincts/:state/:county/:precinctId', function(data){
 
     var state = data.state.toLowerCase();
     var county = data.county.toLowerCase();
     var precinctId = data.precinctId;
 
     // placeholder name until data is loaded from firebase
-    $('.precinct-name').text(county + ', ' + state + ' ' + precinctId);
-    $('.wait-time').text('Unknown');
-    $('.last-updated').text('Never');
-    
+    var element = app.render(app.compile('precinct_full', {
+      name: county + ', ' + state + ' ' + precinctId,
+      wait: 'Unknown',
+      lastUpdated: 'Never'
+    }));
+
     // get the node containing precinct data from firebase
     var precinctNode = app.db.child('precincts').child(state).child(county).child(precinctId);
 
@@ -26,52 +27,66 @@
 
     var timeUpdateInterval = null;
 
-    // get basic precinct data
-    precinctNode.on('value', function(snapshot){
-      var precint = snapshot.val();
+    // when a wait time button is clicked
+    // console.log(element, element.find('.btn-wait'));
+    console.log('prepare', $(element));
 
-      if(precint && precint.name){
-        $('.precinct-name').text(precint.name);
-      }
+    function addButtonListeners(element){
+        $(element).find('.btn-wait').click(function(){
+
+          console.log('click');
+
+          // the severity of the wait is pulled from the 'wait' attribute on the button html
+          var wait = $(this).attr('wait');
+
+          // create a new wait time estimate at this moment
+          // TODO: Authentication - don't let just anyone submit times
+          var newNode = waitNode.push({
+            timestamp: new Date().toISOString(),
+            wait: wait,
+            state: state,
+            county: county,
+            precinct: precinctId
+          });
+
+          // update the precinct with the latest wait id
+          precinctNode.update({lastWait: newNode.key()});
+
+          // updating the data will cause on('value') to be called, so we don't have to draw the new data
+        });
+    }
+
+    addButtonListeners(element);
+
+    // get basic precinct data
+    precinctNode.on('value', function(valSnapshot){
+      var precinct = valSnapshot.val();
+
       // TODO: map link
-      if(precint && precint.lastWait){
+      if(precinct && precinct.lastWait){
         // get new wait time
-        waitNode.child(precint.lastWait).once('value', function(snapshot){
-          var waitTime = snapshot.val();
+        waitNode.child(precinct.lastWait).once('value', function(waitSnapshot){
+          var waitTime = waitSnapshot.val();
           // update wait time
-          $('.wait-time').text(waitTimeMap[waitTime.wait]);
+          var element = app.render(app.compile('precinct_full', {
+            name: precinct.name,
+            wait: waitMap[waitTime.wait],
+            lastUpdated: new Date(waitTime.timestamp).toRelativeString()
+          }));
+          addButtonListeners(element); // re-add listeners
 
           //update last updated. we do this on an interval so the time updates regularly
           // (e.g. 3 minutes ago, 4 minutes ago, ...)
           // `toRelativeString` is thanks to bower library `natural_dates`
-          $('.last-updated').text(new Date(waitTime.timestamp).toRelativeString());
-
-          clearInterval(timeUpdateInterval);
-          timeUpdateInterval = setInterval(function(){
-            $('.last-updated').text(new Date(waitTime.timestamp).toRelativeString());
-          }, 15*1000);
+          var lastUpdated = $(element).find('.last-updated');
+          var interval = setInterval(function(){
+            lastUpdated.text(new Date(waitTime.timestamp).toRelativeString());
+          }, 5 * 1000);
+          lastUpdated.on('remove', function(){
+            clearInterval(interval);
+          });
         });
       }
-    });   
-
-    // when a wait time button is clicked
-    $('.btn-wait').click(function(){
-
-      // the severity of the wait is pulled from the 'wait' attribute on the button html
-      var wait = $(this).attr('wait');
-
-      // create a new wait time estimate at this moment
-      // TODO: Authentication - don't let just anyone submit times
-      var newNode = waitNode.push({
-        timestamp: new Date().toISOString(),
-        wait: wait,
-        state: state,
-        county: county,
-        precinct: precinctId
-      });
-
-      precinctNode.update({lastWait: newNode.key()});
-
     });
   });
 
