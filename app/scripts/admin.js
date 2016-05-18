@@ -14,14 +14,15 @@
   // TODO: allow filtering of admin (e.g. by state, county)
   app.addRoute('/admin', function(data){
 
-    var element = app.render(app.compile('admin'));
+    var element = app.render(app.compile('admin')).find('#admin-container');
 
-    function sort(){
-        var children = element.children();
-        children.detach().sort(function(elm1, elm2){
-          return $(elm1).attr('sort') < $(elm2).attr('sort');
-        });
-        element.append(children);
+    // Sorting of precinct info boxes are done using the 'sort' attribute (see below)
+    function sortElements(){
+      var children = element.children();
+      children.detach().sort(function(elm1, elm2){
+        return $(elm1).attr('sort') < $(elm2).attr('sort');
+      });
+      element.append(children);
     }
 
     var waitNode = app.db.child('wait-times').orderByChild('wait').limitToLast(100);
@@ -31,18 +32,20 @@
       var id = getId(data);
       $('#' + id).remove();
 
-      $(element).find('#admin-container').append(app.compile('precinct_admin', {
+      element.append(app.compile('precinct_admin', {
         id: id,
-        waitClass: ['primary', 'success', 'warning', 'danger'][data.wait],
+        // multiplying the unix timestamp by the magnitude of the wait is a hacky way
+        // to sort first by wait time and then by most recently updated (big numbers should come earlier)
+        // TODO: find a better sort system!
         sort: (data.wait + 1) * new Date(data.timestamp).getTime(),
-        url: ['/precincts', data.state, data.county, data.precinct].join('/'),
+        waitClass: ['primary', 'success', 'warning', 'danger'][data.wait],
         name: (data.county + ', ' + data.state + ' ' + data.precinct).toUpperCase(),
-        wait: data.wait,
         waitName: waitTimeMap[data.wait],
+        url: ['/precincts', data.state, data.county, data.precinct].join('/'),
         lastUpdated: new Date(data.timestamp).toRelativeString()
       }));
 
-      sort();
+      sortElements();
     });
     waitNode.on('child_removed', function(snapshot){
       element.remove($('#' + getId(data)));
