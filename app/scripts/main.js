@@ -56,7 +56,7 @@ window.app = (function($, Firebase){
       $('.container').empty();
       return $('.container').append(e);
     }
-  }
+  };
 
   // once all the javascript is loaded and ready to go
   $(document).ready(function(){
