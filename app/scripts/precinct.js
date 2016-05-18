@@ -28,13 +28,9 @@
     var timeUpdateInterval = null;
 
     // when a wait time button is clicked
-    // console.log(element, element.find('.btn-wait'));
-    console.log('prepare', $(element));
 
     function addButtonListeners(element){
         $(element).find('.btn-wait').click(function(){
-
-          console.log('click');
 
           // the severity of the wait is pulled from the 'wait' attribute on the button html
           var wait = $(this).attr('wait');
