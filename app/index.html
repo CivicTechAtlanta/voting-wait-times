@@ -16,7 +16,7 @@
     <!-- endbower -->
     <!-- endbuild -->
 
-    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="/styles/main.css">
 
     <!-- build:js scripts/vendor/modernizr.js -->
     <script src="/bower_components/modernizr/modernizr.js"></script>
@@ -27,51 +27,16 @@
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
+    <div class="header">
+      <ul class="nav nav-pills pull-right">
+        <li><a href="/">Precincts</a></li>
+        <li><a href="/admin">Admin</a></li>
+        <li><a href="#">Login</a></li>
+      </ul>
+      <h3 class="text-muted">Voting Wait Times</h3>
+    </div>
     <div class="container">
-      <div class="header">
-        <ul class="nav nav-pills pull-right">
-          <!-- <li class="active"><a href="#">Home</a></li> -->
-          <!-- <li><a href="#">About</a></li> -->
-          <!-- <li><a href="#">Contact</a></li> -->
-          <li><a href="index.html">Report</a></li>
-          <li><a href="admin.html">Admin</a></li>
-          <li><a href="login.html">Login</a></li>
-          <li><a href="search.html">Search</a></li>
-          <li><a href="district.html">District</a></li>
-        </ul>
-        <h3 class="text-muted">Voting Wait Times</h3>
-      </div>
-      
-      </br>
-      <!-- redesigned layout -->
 
-        <!-- Buttons for wait times -->
-        <div class="jumbotron">
-          <h1>Polling Station Wait Times</h1>
-
-          <div class="wait-time-block">
-
-            <h1 class="precinct-name">Precinct Name</h1>
-            <!-- <h4 class="wait-time-label">Wait Time: <span class="wait-time label label-default">RED</span></h4> -->
-            <div class="panel panel-default">
-              <div class="wait-time panel-heading"><h4 class="wait-time-label">Wait Time: RED</h4></div>
-              <div class="panel-body"> 
-                <span class="last-updated-label">Last Updated: </span>
-                <span class="last-updated">2:15</span>
-              </div>
-            </div>
-            
-          </div>
-
-        </br>
-
-          <p class="lead">Select the button that reflects the approximate wait time at this polling station right now.</p>
-          <button type="New Game" class="btn btn-primary btn-block btn-wait" wait="0" role="button">No Line (whoo hoo!)</button></br>
-          <button type="New Game" class="btn btn-success btn-block btn-wait" wait="1" role="button">Small Line (Less than 10 min)</button></br>
-          <button type="New Game" class="btn btn-info btn-block btn-wait" wait="2" role="button">Medium Line (10-45 min)</button></br>
-          <button type="New Game" class="btn btn-warning btn-block btn-wait" wait="3" role="button">Long Line (Over 45 min)</button></br>
-          <button type="New Game" class="btn btn-danger btn-block btn-panic" role="button">Panic, help!</button></br>
-        </div>
 
     </div><!-- end container -->
 
@@ -81,6 +46,8 @@
     <script src="/bower_components/jquery/dist/jquery.js"></script>
     <script src="/bower_components/js-md5/build/md5.min.js"></script>
     <script src="/bower_components/natural_dates/natural_dates.js"></script>
+    <script src="/bower_components/firebase/firebase.js"></script>
+    <script src="/bower_components/handlebars/handlebars.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -100,7 +67,11 @@
     <!-- endbuild -->
 
     <!-- build:js scripts/main.js -->
-    <script src="scripts/main.js"></script>
+    <script src="/scripts/main.js"></script>
+    <script src="/scripts/templates.js"></script>
+    <script src="/scripts/admin.js"></script>
+    <script src="/scripts/precinct.js"></script>
+    <script src="/scripts/404.js"></script>
     <!-- endbuild -->
   </body>
 </html>

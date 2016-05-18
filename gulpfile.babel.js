@@ -4,7 +4,7 @@ import gulpLoadPlugins from 'gulp-load-plugins';
 import browserSync from 'browser-sync';
 import del from 'del';
 import {stream as wiredep} from 'wiredep';
-import nodemon from 'gulp-nodemon';
+import modRewrite from 'connect-modrewrite';
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
@@ -66,7 +66,22 @@ const testLintOptions = {
 gulp.task('lint', lint('app/scripts/**/*.js'));
 gulp.task('lint:test', lint('test/spec/**/*.js', testLintOptions));
 
-gulp.task('html', ['styles:dist', 'scripts'], () => {
+gulp.task('templates', function(){
+  gulp.src('app/templates/*.hbs')
+    .pipe($.handlebars({
+      handlebars: require('handlebars')
+    }))
+    .pipe($.wrap('Handlebars.template(<%= contents %>)'))
+    .pipe($.declare({
+      namespace: 'app.templates',
+      noRedeclare: true, // Avoid duplicate declarations 
+    }))
+    .pipe($.concat('templates.js'))
+    .pipe(gulp.dest('.tmp/scripts'))
+    .pipe(reload({stream: true}));
+});
+
+gulp.task('html', ['styles:dist', 'scripts', 'templates'], () => {
   return gulp.src('app/*.html')
     .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
     .pipe($.if('*.js', $.uglify()))
@@ -105,12 +120,21 @@ gulp.task('extras', () => {
 
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
-gulp.task('serve', ['styles', 'scripts', 'fonts', 'nodemon'], () => {
+gulp.task('serve', ['styles', 'scripts', 'templates', 'fonts'], () => {
   browserSync({
     notify: false,
     port: 7000,
-    proxy: "http://localhost:5000",
-    serveStatic: ['.tmp', 'app', '.']
+    server: {
+      baseDir: ['.tmp', 'app'],
+      routes: {
+        '/bower_components': 'bower_components'
+      },
+      middleware: [
+        //single-page app:
+        //  https://github.com/BrowserSync/browser-sync/issues/204#issuecomment-212183745
+        modRewrite(['!\\.\\w+$ /index.html [L]'])
+      ]
+    }
   });
 
   gulp.watch([
@@ -121,23 +145,9 @@ gulp.task('serve', ['styles', 'scripts', 'fonts', 'nodemon'], () => {
 
   gulp.watch('app/styles/**/*.scss', ['styles']);
   gulp.watch('app/scripts/**/*.js', ['scripts']);
+  gulp.watch('app/templates/**/*.hbs', ['templates']);
   gulp.watch('app/fonts/**/*', ['fonts']);
   gulp.watch('bower.json', ['wiredep', 'fonts']);
-});
-
-// start the server (https://gist.github.com/sogko/b53d33d4f3b40d3b4b2e)
-gulp.task('nodemon', function (cb) {
-  var started = false;
-  return nodemon({
-    script: 'server.js'
-  }).on('start', function () {
-    // to avoid nodemon being started multiple times
-    // thanks @matthisk
-    if (!started) {
-      cb();
-      started = true; 
-    } 
-  });
 });
 
 gulp.task('serve:test', ['scripts'], () => {
@@ -156,7 +166,7 @@ gulp.task('serve:test', ['scripts'], () => {
 
   gulp.watch('app/scripts/**/*.js', ['scripts']);
   gulp.watch('test/spec/**/*.js').on('change', reload);
-  // gulp.watch('test/spec/**/*.js', ['lint:test']);
+  gulp.watch('test/spec/**/*.js', ['lint:test']);
 });
 
 // inject bower components
@@ -175,7 +185,7 @@ gulp.task('wiredep', () => {
     .pipe(gulp.dest('app'));
 });
 
-gulp.task('build', [/*'lint',*/ 'html', 'images', 'fonts', 'extras'], () => {
+gulp.task('build', ['lint', 'html', 'images', 'fonts', 'extras'], () => {
   return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
 });
 

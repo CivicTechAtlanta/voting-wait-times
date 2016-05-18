@@ -1,113 +1,70 @@
+window.app = (function($, Firebase){
 
+  var app = {
 
-//http://stackoverflow.com/a/3855394
-(function($) {
-    $.QueryString = (function(a) {
-        if (a == "") return {};
-        var b = {};
-        for (var i = 0; i < a.length; ++i)
-        {
-            var p=a[i].split('=');
-            if (p.length != 2) continue;
-            b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
-        }
-        return b;
-    })(window.location.search.substr(1).split('&'))
-})(jQuery);
+    // the array for containing the routes of our app
+    routes: [],
 
+    // the top-level reference to our Firebase backend
+    db: new Firebase('https://voting-wait-times.firebaseio.com'),
 
-var state = $.QueryString['state'];
-var precinct = $.QueryString['precinct'];
-
-
-// { "timestamp": "2016-03-05T00:00:00", "precinct": "1", "waittime": 2, "reporterid": "e3f99640d60577f72086b54087423593", "state": "GA"}
-function addEstimate(precinctnum, state, email, waittime, callback){
-  console.log("adding time");
-  $.ajax({
-    method: 'POST',
-    url: '/waittimes',
-    data: JSON.stringify({
-      precinct: precinctnum,
-      state: state,
-      reporterid: md5(email),
-      waittime: waittime,
-      timestamp: new Date().toISOString()
-    }),
-    contentType: 'application/json',
-    dataType: 'json',
-    success: null
-  }).then(callback);
-}
-
-function getTime(precinctnum, state, callback){
-  console.log("getting time");
-  $.ajax({
-    method: 'GET',
-    url: '/waittimes',
-    data: {
-      where: 'precinct = '+precinctnum+' AND state = \''+state+'\'',
-      order: 'timestamp DESC',
-      limit: 1
+    // Call this method to add a new route. If the current path matches
+    // the given pattern, the callback is called. Patterns are searched
+    // in the order they are added and stop on the first match.
+    // The pattern is a string of the path to match, with a leading slash.
+    // Variables can be path parts by starting them with a colon. For
+    // example:
+    //    Given a pattern '/users/:id', if a user visits /users/14,
+    //    the callback is called with the argument {id: '14'}.
+    addRoute: function(pattern, callback){
+      this.routes.push({ pattern: pattern, callback: callback });
     },
-    dataType: 'json'
-  }).then(callback);
-}
-
-
-var waitTimeMap = [
-  "No Line (whoo hoo!)",
-  "Small Line (Less than 10 min)",
-  "Medium Line (10-45 min)",
-  "Long Line (Over 45 min)"
-];
-
-function drawTime() {
-
-    console.log("updating...");
-
-    getTime(precinct, state, function(res){
-
-      console.log("got data", res);
-
-      $('.precinct-name').text(state + " Precinct "+precinct);
-
-      if(res[0]){
-        var time = res[res.length-1];
-        $('.wait-time').text(waitTimeMap[time.waittime]);
-
-        $('.last-updated').text(new Date(time.timestamp).toRelativeString());
-      }else{
-        $('.wait-time').text("Unknown");
-
-        $('.last-updated').text("Never");
+    // Execute the appropriate callback for the given path
+    route: function(path){
+      //for each route
+      for(var i = 0; i < this.routes.length; i++){
+        var route = this.routes[i];
+        // get a list of the variable parameter names
+        var keys = route.pattern.match(/:[^\/]+/g);
+        // create a regular expression to match with
+        var pattern = new RegExp(route.pattern.replace(/:[^\/]+/g, '([^\/]+)'));
+        var matches = path.match(pattern);
+        // if the path is a match
+        if(matches){
+          // collect the values of the parameters
+          var data = {};
+          for(var j = 1; j < matches.length; j++){
+            data[keys[j - 1].substring(1)] = matches[j];
+          }
+          // call the callback with the result
+          route.callback(data);
+          // stop looking for matches
+          return;
+        }
       }
-    });
-}
+      // if no matches were found
+      if(this.fallthroughRoute){
+        this.fallthroughRoute();
+      }else{
+        console.warn('No route found for ' + path);
+      }
+    },
+    compile: function(templateName, data){
+      return this.templates[templateName](data);
+    },
+    render: function(e){
+      $('.container').empty();
+      return $('.container').append(e);
+    }
+  }
 
-
-function sendWait(time){
-  var email = $('.email-field').val();
-
-  addEstimate(precinct, state, email, time, function(){
-    drawTime();
-  });
-}
-
-$(document).ready(function(){
-
-    $('.state-field').val(state);
-    $('.precinct-field').val(precinct);
-
-  drawTime();
-  setInterval(drawTime, 15*1000);
-
-  $('.btn-wait').click(function(){
-    var wait = $(this).attr('wait');
-
-    console.log("submit", wait);
-
-    sendWait(wait);
+  // once all the javascript is loaded and ready to go
+  $(document).ready(function(){
+    // route the request
+    console.log('route');
+    app.route(window.location.pathname);
   });
 
-  // $('.btn-panic')
-});
+  return app;
+
+})(window.window.jQuery, window.Firebase);
