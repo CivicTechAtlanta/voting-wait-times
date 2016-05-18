@@ -31,12 +31,12 @@
       var id = getId(data);
       $('#' + id).remove();
 
-      element.append(app.compile('precinct_admin', {
+      $(element).find('#admin-container').append(app.compile('precinct_admin', {
         id: id,
-        btnClass: ['btn-primary', 'btn-success', 'btn-warning', 'btn-danger'][data.wait],
+        waitClass: ['primary', 'success', 'warning', 'danger'][data.wait],
         sort: (data.wait + 1) * new Date(data.timestamp).getTime(),
         url: ['/precincts', data.state, data.county, data.precinct].join('/'),
-        name: data.county + ', ' + data.state + ' ' + data.precinct,
+        name: (data.county + ', ' + data.state + ' ' + data.precinct).toUpperCase(),
         wait: data.wait,
         waitName: waitTimeMap[data.wait],
         lastUpdated: new Date(data.timestamp).toRelativeString()
