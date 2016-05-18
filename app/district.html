@@ -28,7 +28,7 @@
     <![endif]-->
 
     <div class="container">
-       <div class="header">
+      <div class="header">
         <ul class="nav nav-pills pull-right">
           <!-- <li class="active"><a href="#">Home</a></li> -->
           <!-- <li><a href="#">About</a></li> -->
@@ -37,7 +37,7 @@
           <li><a href="admin.html">Admin</a></li>
           <li><a href="login.html">Login</a></li>
           <li><a href="search.html">Search</a></li>
-          <li><a href="district.html">District</a></li>
+          <li><a href="district.html">District</a></li>          
         </ul>
         <h3 class="text-muted">Voting Wait Times</h3>
       </div>
@@ -45,53 +45,26 @@
       </br>
       <!-- redesigned layout -->
 
-      <!-- User role form -->
+        <!-- Buttons for wait times -->
+        <h1 class= "centerfy">Polling Station Wait Times</h1>
+        <hr/>
+        <div class="jumbotron">
 
-      <div class="well well-lg">
-        <h4>If you have used this app before please enter your e-mail to sign in here</h4>
-        <form class="form-horizontal">
-          <div class="form-group">
-            <input  class="text email-field form-control" type="text" name="userForm" id="userForm" autocomplete="off" placeholder="Enter your email"/>
+          <div class="wait-time-block">
+
+            <h2 class="precinct-name">Precinct Name</h2>
+            <!-- <h4 class="wait-time-label">Wait Time: <span class="wait-time label label-default">RED</span></h4> -->
+            <div class="panel panel-warning">
+              <div class="wait-time panel-heading"><h4 class="wait-time-label">Wait Time: RED</h4></div>
+              <div class="panel-body"> 
+                <span class="last-updated-label">Last Updated: </span>
+                <span class="last-updated">2:15</span>
+              </div>
+            </div>
+            
           </div>
-          <button type="New Game" class="btn btn-success btn-lg form-group" role="button">Submit</button>
 
-        </form><!-- end form -->
-
-      </div><!-- end well -->
-
-      <!-- <hr/> -->
-
-      <!-- <div class="well"> -->
-
-            <!-- <form class="user-form"> -->
-              
-           <!-- User registration form -->
-
-              <!-- <div class="row">
-                <div class="form-group col-xs-12">
-                  <input  class="text email-field form-control" type="text" name="userForm" id="userForm" autocomplete="off" placeholder="Enter your email" required/>
-
-                  <select class="form-control precinct-field">                    
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                  </select required/>
-                </div> 
-
-                 </br>
-                <div class="centerfy">
-                  <h4>Select whether you are:</h4>
-                  <button type="New Game" class="btn btn-primary btn-lg" role="button">A Volunteer</button>
-                  <button type="New Game" class="btn btn-primary btn-lg" role="button">A Voter (non-volunteer)</button>
-                  <button type="New Game" class="btn btn-primary btn-lg" role="button">An Admin</button>                  
-                </div>  
- 
-              </div> --> <!-- end row -->
-                
-            <!-- </form> -->
-      <!-- </div> --><!-- end well -->
-
-
+        </br>
 
     </div><!-- end container -->
 
