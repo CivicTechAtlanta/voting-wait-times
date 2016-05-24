@@ -16,30 +16,37 @@ window.app = (function($, Firebase){
     // example:
     //    Given a pattern '/users/:id', if a user visits /users/14,
     //    the callback is called with the argument {id: '14'}.
-    addRoute: function(pattern, callback){
-      this.routes.push({ pattern: pattern, callback: callback });
+    addRoute: function(patterns, callback){
+      if(typeof patterns === 'string'){
+        // make it an array of one
+        patterns = [patterns];
+      }
+      this.routes.push({ patterns: patterns, callback: callback });
     },
     // Execute the appropriate callback for the given path
     route: function(path){
       //for each route
       for(var i = 0; i < this.routes.length; i++){
         var route = this.routes[i];
-        // get a list of the variable parameter names
-        var keys = route.pattern.match(/:[^\/]+/g);
-        // create a regular expression to match with
-        var pattern = new RegExp(route.pattern.replace(/:[^\/]+/g, '([^\/]+)'));
-        var matches = path.match(pattern);
-        // if the path is a match
-        if(matches){
-          // collect the values of the parameters
-          var data = {};
-          for(var j = 1; j < matches.length; j++){
-            data[keys[j - 1].substring(1)] = matches[j];
+        // for each provided pattern
+        for(var j = 0; j < route.patterns.length; j++){
+          // get a list of the variable parameter names
+          var keys = route.patterns[j].match(/:[^\/]+/g);
+          // create a regular expression to match with
+          var pattern = new RegExp('^'+route.patterns[j].replace(/:[^\/]+/g, '([^\/]+)')+'\/?$');
+          var matches = path.match(pattern);
+          // if the path is a match
+          if(matches){
+            // collect the values of the parameters
+            var data = {};
+            for(var j = 1; j < matches.length; j++){
+              data[keys[j - 1].substring(1)] = matches[j];
+            }
+            // call the callback with the result
+            route.callback(data);
+            // stop looking for matches
+            return;
           }
-          // call the callback with the result
-          route.callback(data);
-          // stop looking for matches
-          return;
         }
       }
       // if no matches were found
@@ -56,12 +63,11 @@ window.app = (function($, Firebase){
       $('.container').empty();
       return $('.container').append(e);
     }
-  }
+  };
 
   // once all the javascript is loaded and ready to go
   $(document).ready(function(){
     // route the request
-    console.log('route');
     app.route(window.location.pathname);
   });
 

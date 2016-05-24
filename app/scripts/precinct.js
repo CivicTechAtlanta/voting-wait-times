@@ -1,12 +1,5 @@
 (function(app, $){
 
-  var waitMap = [
-    'No Line (whoo hoo!)',
-    'Small Line (Less than 10 min)',
-    'Medium Line (10-45 min)',
-    'Long Line (Over 45 min)'
-  ];
-
   app.addRoute('/precincts/:state/:county/:precinctId', function(data){
 
     var state = data.state.toLowerCase();
@@ -16,8 +9,9 @@
     // placeholder name until data is loaded from firebase
     var element = app.render(app.compile('precinct_full', {
       name: county + ', ' + state + ' ' + precinctId,
-      wait: 'Unknown',
-      lastUpdated: 'Never'
+      wait: app.waitInfo(-1), // unknown wait
+      lastUpdated: 'Never',
+      showButtons: true //TODO: don't show to unauthorized users
     }));
 
     // get the node containing precinct data from firebase
@@ -28,13 +22,9 @@
     var timeUpdateInterval = null;
 
     // when a wait time button is clicked
-    // console.log(element, element.find('.btn-wait'));
-    console.log('prepare', $(element));
 
     function addButtonListeners(element){
         $(element).find('.btn-wait').click(function(){
-
-          console.log('click');
 
           // the severity of the wait is pulled from the 'wait' attribute on the button html
           var wait = $(this).attr('wait');
@@ -70,8 +60,9 @@
           // update wait time
           var element = app.render(app.compile('precinct_full', {
             name: precinct.name,
-            wait: waitMap[waitTime.wait],
-            lastUpdated: new Date(waitTime.timestamp).toRelativeString()
+            wait: app.waitInfo(waitTime.wait),
+            lastUpdated: new Date(waitTime.timestamp).toRelativeString(),
+            showButtons: true //TODO: don't show to unauthorized users
           }));
           addButtonListeners(element); // re-add listeners
 

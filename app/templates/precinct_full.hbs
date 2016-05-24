@@ -1,13 +1,12 @@
 <div class="jumbotron">
-  <h1>Polling Station Wait Times</h1>
-
   <div class="wait-time-block">
 
     <h1 class="precinct-name">{{name}}</h1>
-    <div class="panel panel-default">
+    <h3>FULTON, GA 04V</h3>
+    <div class="panel panel-{{wait.bootstrapClass}}">
       <div class="wait-time panel-heading">
         <h4 class="wait-time-label">Wait Time:</h4>
-        <h4 class="wait-time">{{wait}}</h4>
+        <h4 class="wait-time">{{wait.name}}</h4>
       </div>
       <div class="panel-body"> 
         <span class="last-updated-label">Last Updated: </span>
@@ -16,16 +15,18 @@
     </div>
   </div>
 
-  </br>
-
-  <p class="lead">Select the button that reflects the approximate wait time at this polling station right now.</p>
-  <button class="btn btn-primary btn-block btn-wait" wait="0" role="button">No Line (whoo hoo!)</button>
-  </br>
-  <button class="btn btn-success btn-block btn-wait" wait="1" role="button">Small Line (Less than 10 min)</button>
-  </br>
-  <button class="btn btn-warning btn-block btn-wait" wait="2" role="button">Medium Line (10-45 min)</button>
-  </br>
-  <button class="btn btn-danger  btn-block btn-wait" wait="3" role="button">Long Line (Over 45 min)</button>
-  </br>
-  <!-- <button class="btn btn-danger btn-block btn-panic" role="button">Panic, help!</button></br> -->
+  {{#if showButtons}}
+  <div>
+    <p class="lead">Select the button that reflects the approximate wait time at this polling station right now.</p>
+    <button class="btn btn-primary btn-block btn-wait" wait="0" role="button">No Line (whoo hoo!)</button>
+    </br>
+    <button class="btn btn-success btn-block btn-wait" wait="1" role="button">Small Line (Less than 10 min)</button>
+    </br>
+    <button class="btn btn-warning btn-block btn-wait" wait="2" role="button">Medium Line (10-45 min)</button>
+    </br>
+    <button class="btn btn-danger  btn-block btn-wait" wait="3" role="button">Long Line (Over 45 min)</button>
+    </br>
+    <!-- <button class="btn btn-danger btn-block btn-panic" role="button">Panic, help!</button></br> -->
+  </div>
+  {{/if}}
 </div>

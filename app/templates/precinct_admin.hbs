@@ -1,10 +1,11 @@
-<div class="col-xs-6 col-md-4" id={{id}} sort={{sort}}>
-  <div class="panel panel-{{waitClass}} wait-time-block">
+<div class="col-xs-6 col-md-4" id={{id}} time={{time}} sort={{sort}}>
+  <div class="panel panel-{{wait.bootstrapClass}} wait-time-block">
     <div class="panel-heading">
-      <h4 class="center_it precinct-name">{{name}}</h4>
+      <h4 class="center_it precinct-name">{{title}}</h4>
     </div>
     <div class="panel-body">
-      <h4 class="wait-time-label">Wait Time: <span class="wait-time label label-{{waitClass}}">{{waitName}}</span></h4>
+      <h6>{{subtitle}}</h6>
+      <h4 class="wait-time-label">Wait Time: <span class="wait-time label label-{{wait.bootstrapClass}}">{{wait.name}}</span></h4>
       <span class="last-updated-label">Last Updated: </span>
       <span class="last-updated">{{lastUpdated}}</span>
     </div>
