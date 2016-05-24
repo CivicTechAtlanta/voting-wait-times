@@ -4,8 +4,7 @@
     return data.state + '-' + data.county + '-' + data.precinct;
   }
 
-  // TODO: allow filtering of admin (e.g. by state, county)
-  app.addRoute('/admin', function(data){
+  app.addRoute(['/admin', '/admin/:state', '/admin/:state/:county'], function(data){
 
     var element = app.render(app.compile('admin')).find('#admin-container');
 
@@ -18,28 +17,65 @@
       element.append(children);
     }
 
-    var waitNode = app.db.child('wait-times').orderByChild('wait').limitToLast(100);
+    var precinctNode = app.db.child('precincts');
+
+    var waitStream = app.db.child('wait-times').orderByChild('wait').limitToLast(100);
     // get the latest 100 wait times
-    waitNode.on('child_added', function(snapshot){
-      var data = snapshot.val();
-      var id = getId(data);
-      $('#' + id).remove();
+    waitStream.on('child_added', function(waitSnapshot){
+      var waitData = waitSnapshot.val();
+      if(data.state && data.county){
+        // filter on county
+        if(waitData.state !== data.state || waitData.county !== data.county){
+          return;
+        }
+      }else if(data.state){
+        // filter on state
+        if(waitData.state !== data.state){
+          return;
+        }
+      }
+      precinctNode.child(waitData.state).child(waitData.county).child(waitData.precinct).once('value', function(precinctSnapshot){
+        var precinct = precinctSnapshot.val();
+        var id = getId(waitData);
+        var existingElement = $('#' + id);
+        if(existingElement){
+          // skip older one
+          if(Number(existingElement.attr('time')) > new Date(waitData.timestamp).getTime()){
+            return
+          }else{
+            existingElement.remove();
+          }
+        }
 
-      element.append(app.compile('precinct_admin', {
-        id: id,
-        // multiplying the unix timestamp by the magnitude of the wait is a hacky way
-        // to sort first by wait time and then by most recently updated (big numbers should come earlier)
-        // TODO: find a better sort system!
-        sort: (data.wait + 1) * new Date(data.timestamp).getTime(),
-        wait: app.waitInfo(data.wait),
-        name: (data.county + ', ' + data.state + ' ' + data.precinct).toUpperCase(),
-        url: ['/precincts', data.state, data.county, data.precinct].join('/'),
-        lastUpdated: new Date(data.timestamp).toRelativeString()
-      }));
+        var title;
+        var subtitle;
+        var formattedPrecinctInfo = (waitData.county + ', ' + waitData.state + ' ' + waitData.precinct).toUpperCase();
+        if(precinct){
+          title = precinct.name;
+          subtitle = formattedPrecinctInfo;
+        }else{
+          title = formattedPrecinctInfo;
+          subtitle = "";
+        }
 
-      sortElements();
+        element.append(app.compile('precinct_admin', {
+          id: id,
+          // multiplying the unix timestamp by the magnitude of the wait is a hacky way
+          // to sort first by wait time and then by most recently updated (big numbers should come earlier)
+          // TODO: find a better sort system!
+          sort: (waitData.wait + 1) * new Date(waitData.timestamp).getTime(),
+          time: new Date(waitData.timestamp).getTime(),
+          wait: app.waitInfo(waitData.wait),
+          title: title,
+          subtitle: subtitle,
+          url: ['/precincts', waitData.state, waitData.county, waitData.precinct].join('/'),
+          lastUpdated: new Date(waitData.timestamp).toRelativeString()
+        }));
+
+        sortElements();
+      });
     });
-    waitNode.on('child_removed', function(snapshot){
+    waitStream.on('child_removed', function(snapshot){
       element.remove($('#' + getId(data)));
     });
   });
