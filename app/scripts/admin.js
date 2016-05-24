@@ -1,12 +1,5 @@
 (function(app, $){
 
-  var waitTimeMap = [
-    'No Line (whoo hoo!)',
-    'Small Line (Less than 10 min)',
-    'Medium Line (10-45 min)',
-    'Long Line (Over 45 min)'
-  ];
-
   function getId(data){
     return data.state + '-' + data.county + '-' + data.precinct;
   }
@@ -38,9 +31,8 @@
         // to sort first by wait time and then by most recently updated (big numbers should come earlier)
         // TODO: find a better sort system!
         sort: (data.wait + 1) * new Date(data.timestamp).getTime(),
-        waitClass: ['primary', 'success', 'warning', 'danger'][data.wait],
+        wait: app.waitInfo(data.wait),
         name: (data.county + ', ' + data.state + ' ' + data.precinct).toUpperCase(),
-        waitName: waitTimeMap[data.wait],
         url: ['/precincts', data.state, data.county, data.precinct].join('/'),
         lastUpdated: new Date(data.timestamp).toRelativeString()
       }));

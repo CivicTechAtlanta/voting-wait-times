@@ -1,12 +1,5 @@
 (function(app, $){
 
-  var waitMap = [
-    'No Line (whoo hoo!)',
-    'Small Line (Less than 10 min)',
-    'Medium Line (10-45 min)',
-    'Long Line (Over 45 min)'
-  ];
-
   app.addRoute('/precincts/:state/:county/:precinctId', function(data){
 
     var state = data.state.toLowerCase();
@@ -16,8 +9,7 @@
     // placeholder name until data is loaded from firebase
     var element = app.render(app.compile('precinct_full', {
       name: county + ', ' + state + ' ' + precinctId,
-      wait: 'Unknown',
-      waitClass: 'default',
+      wait: app.waitInfo(-1), // unknown wait
       lastUpdated: 'Never',
       showButtons: true //TODO: don't show to unauthorized users
     }));
@@ -68,8 +60,7 @@
           // update wait time
           var element = app.render(app.compile('precinct_full', {
             name: precinct.name,
-            wait: waitMap[waitTime.wait],
-            waitClass: ['primary', 'success', 'warning', 'danger'][waitTime.wait],
+            wait: app.waitInfo(waitTime.wait),
             lastUpdated: new Date(waitTime.timestamp).toRelativeString(),
             showButtons: true //TODO: don't show to unauthorized users
           }));
