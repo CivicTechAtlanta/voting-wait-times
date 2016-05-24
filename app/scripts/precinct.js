@@ -17,7 +17,9 @@
     var element = app.render(app.compile('precinct_full', {
       name: county + ', ' + state + ' ' + precinctId,
       wait: 'Unknown',
-      lastUpdated: 'Never'
+      waitClass: 'default',
+      lastUpdated: 'Never',
+      showButtons: true //TODO: don't show to unauthorized users
     }));
 
     // get the node containing precinct data from firebase
@@ -67,7 +69,9 @@
           var element = app.render(app.compile('precinct_full', {
             name: precinct.name,
             wait: waitMap[waitTime.wait],
-            lastUpdated: new Date(waitTime.timestamp).toRelativeString()
+            waitClass: ['primary', 'success', 'warning', 'danger'][waitTime.wait],
+            lastUpdated: new Date(waitTime.timestamp).toRelativeString(),
+            showButtons: true //TODO: don't show to unauthorized users
           }));
           addButtonListeners(element); // re-add listeners
 
