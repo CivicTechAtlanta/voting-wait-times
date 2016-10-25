@@ -1,4 +1,4 @@
-# Appliation Archetecture
+# Appliation Architecture
 
 This is a basic [Single Page Web App](https://en.wikipedia.org/wiki/Single-page_application). In an effort to make it easy for beginners to contribute to the project, this app uses [Handlebars](http://handlebarsjs.com/) templates and a small amount of custom jQuery instead of a more structured framework like Angular or React.
 
