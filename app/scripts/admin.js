@@ -1,5 +1,8 @@
 (function(app, $){
 
+  /*
+      Create a unique string for a state+county+precint combination for identifying elements
+  */
   function getId(data){
     return data.state + '-' + data.county + '-' + data.precinct;
   }
