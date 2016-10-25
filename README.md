@@ -35,8 +35,19 @@ commands:
 
 This gulp task will run the server, open the app in the browser, and automatically reload when changes are made.
 
+### Deployment
+
+The app is hosted on Firebase. [@BrantPadak](https://github.com/BrantPadak) and [@rabidaudio](https://github.com/rabidaudio) currently have access to the Firebase console if you need access.
+
+To deploy, first install the Firebase CLI
+
+    npm i -g firebase-tools
+
+Then simply
+
+    firebase deploy
+
 ### TODO
 
 - Fix admin page design
 - Add way to look up precincts (geolocation, address lookup, search, ...)
-- Document code structure
