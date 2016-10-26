@@ -1,5 +1,5 @@
 (function(app, $){
- 
+
   app.addRoute('/precincts/:state/:county/:precinctId', function(data){
 
     var state = data.state.toLowerCase();

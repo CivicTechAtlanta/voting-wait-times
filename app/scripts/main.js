@@ -33,14 +33,14 @@ window.app = (function($, Firebase){
           // get a list of the variable parameter names
           var keys = route.patterns[j].match(/:[^\/]+/g);
           // create a regular expression to match with
-          var pattern = new RegExp('^'+route.patterns[j].replace(/:[^\/]+/g, '([^\/]+)')+'\/?$');
+          var pattern = new RegExp('^' + route.patterns[j].replace(/:[^\/]+/g, '([^\/]+)') + '\/?$');
           var matches = path.match(pattern);
           // if the path is a match
           if(matches){
             // collect the values of the parameters
             var data = {};
-            for(var j = 1; j < matches.length; j++){
-              data[keys[j - 1].substring(1)] = matches[j];
+            for(var k = 1; k < matches.length; k++){
+              data[keys[k - 1].substring(1)] = matches[k];
             }
             // call the callback with the result
             route.callback(data);
