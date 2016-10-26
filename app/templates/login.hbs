@@ -1,10 +1,23 @@
       <div class="well well-lg">
         <h4>If you have used this app before please enter your e-mail to sign in here</h4>
-        <form class="form-horizontal">
+        <form class="form-inline">
           <div class="form-group">
             <input  class="text email-field form-control" type="text" name="userForm" id="userForm" autocomplete="off" placeholder="Enter your email"/>
+          	<input  class="text pass-field form-control" type="text" name="passForm" id="passForm" autocomplete="off" placeholder="Enter your password"/>
           </div>
-          <button type="New Game" class="btn btn-success btn-lg form-group" role="button">Submit</button>
+          <button type="New Game" class="btn btn-success form-group" role="button">Submit</button>
+
+      	<h4>First Time? Sign up here</h4>
+          <div class="form-group">
+            <input  class="text email-field form-control" type="text" name="new_userForm" id="new_userForm" autocomplete="off" placeholder="Enter your email"/>
+          	<input  class="text pass-field form-control" type="text" name="new_passForm" id="new_passForm" autocomplete="off" placeholder="Enter your password"/>
+          	<select class="form-control" id="new_role">
+			  <option>voter</option>
+			  <option>volunteer</option>
+			  <option>admin</option>
+			</select>
+          </div>
+          <button class="btn btn-success form-group" role="button" id="registration_button" >Sign Up</button>
 
         </form><!-- end form -->
 
