@@ -44,7 +44,7 @@
         if(existingElement){
           // skip older one
           if(Number(existingElement.attr('time')) > new Date(waitData.timestamp).getTime()){
-            return
+            return;
           }else{
             existingElement.remove();
           }
@@ -58,7 +58,7 @@
           subtitle = formattedPrecinctInfo;
         }else{
           title = formattedPrecinctInfo;
-          subtitle = "";
+          subtitle = '';
         }
 
         element.append(app.compile('precinct_admin', {

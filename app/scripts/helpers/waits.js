@@ -2,7 +2,7 @@
 
   // a hash of strings and other info for each integer wait level
   app.waitInfo = function(id){
-    if(!id || id<0 || id>3){
+    if(!id || id < 0 || id > 3){
       return {
         id: -1,
         shortName: 'unknown',
