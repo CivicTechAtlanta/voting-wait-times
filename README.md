@@ -11,6 +11,10 @@ This application is a static HTML web app using [Firebase](https://firebase.com)
 Our slack channel `#voting-wait-times` on [`codeforatlanta.slack.com`](https://codeforatlanta.slack.com).
 Click [here](https://slack.codeforatlanta.org) to join the Code for Atlanta Slack.
 
+## Trello
+
+A list of action items can be found at [https://trello.com/b/kCkLnMTj/voting-wait-times](https://trello.com/b/kCkLnMTj/voting-wait-times)
+
 # Getting started
 
 ### Installing
@@ -50,4 +54,7 @@ Then simply
 ### TODO
 
 - Fix admin page design
-- Add way to look up precincts (geolocation, address lookup, search, ...)
+- Add way to look up precincts (search)
+- Add link to My Voter page / look up on registration card
+- Create View page
+- Add Login functions
